@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pesquisa | IA, Recrutamento Executivo e Equidade no Brasil</title>
+<meta name="description" content="Pesquisa acadêmica sobre o uso de Inteligência Artificial por empresas de recrutamento executivo, headhunting e HR Techs na mediação do acesso a cargos de alta liderança no Brasil.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'sans-serif'],
+          display: ['Montserrat', 'sans-serif'],
+        },
+        colors: {
+          emerald: {
+            500: '#10b981',
+            600: '#059669',
+          },
+          pink: {
+            500: '#ec4899',
+            600: '#db2777',
+          },
+        },
+        animation: {
+          'fade-in-up': 'fadeInUp 0.9s ease-out both',
+          'fade-in': 'fadeIn 1.2s ease-out both',
+        },
+        keyframes: {
+          fadeInUp: {
+            '0%': { opacity: 0, transform: 'translateY(24px)' },
+            '100%': { opacity: 1, transform: 'translateY(0)' },
+          },
+          fadeIn: {
+            '0%': { opacity: 0 },
+            '100%': { opacity: 1 },
+          },
+        },
+      },
+    },
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; }
+
+  .bg-hero {
+    background-image:
+      linear-gradient(180deg, rgba(4, 8, 8, 0.88) 0%, rgba(4, 10, 9, 0.80) 45%, rgba(3, 7, 6, 0.94) 100%),
+      url('assets/img/bg-tech.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
+  @media (max-width: 768px) {
+    .bg-hero { background-attachment: scroll; }
+  }
+
+  .researcher-photo {
+    filter: brightness(1.05) contrast(1.12) saturate(1.05);
+  }
+
+  .glass-card {
+    background: rgba(15, 23, 22, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(16, 185, 129, 0.18);
+  }
+
+  .text-balance { text-wrap: balance; }
+
+  .hero-title {
+    font-size: clamp(1.35rem, 1.05rem + 1.4vw, 2.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  /* Modal transitions */
+  #research-modal { transition: opacity 0.25s ease; }
+  #research-modal[data-state="closed"] { opacity: 0; pointer-events: none; }
+  #research-modal[data-state="open"] { opacity: 1; pointer-events: auto; }
+
+  #research-modal .modal-panel { transition: transform 0.3s ease, opacity 0.3s ease; }
+  #research-modal[data-state="closed"] .modal-panel { transform: translateY(16px) scale(0.98); opacity: 0; }
+  #research-modal[data-state="open"] .modal-panel { transform: translateY(0) scale(1); opacity: 1; }
+</style>
+</head>
+
+<body class="bg-[#04100c] text-gray-100 antialiased">
+
+  <!-- HERO / SEÇÃO ÚNICA -->
+  <section class="bg-hero min-h-screen lg:h-screen w-full flex items-center overflow-y-auto lg:overflow-hidden">
+    <div class="max-w-[95vw] mx-auto px-4 sm:px-8 lg:px-12 py-8 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-28 items-center">
+
+        <!-- COLUNA ESQUERDA: Texto -->
+        <div class="text-left">
+
+          <!-- Selo institucional -->
+          <div class="flex justify-start mb-4 animate-fade-in">
+            <span class="inline-flex items-center gap-2 text-[11px] sm:text-xs uppercase tracking-[0.2em] text-emerald-400/90 font-medium border border-emerald-500/25 rounded-full px-4 py-2 bg-emerald-500/5">
+              Pesquisa Acadêmica &middot; UFMG
+            </span>
+          </div>
+
+          <!-- Título -->
+          <h1 class="hero-title font-display text-balance text-left font-bold text-white animate-fade-in-up">
+            Pesquisa sobre como empresas de recrutamento executivo, consultorias de
+            <span class="text-emerald-400">headhunting</span> e
+            <span class="text-emerald-400">HR Techs</span>
+            utilizam ferramentas de <span class="text-emerald-400">IA</span> na mediação do acesso a cargos de alta liderança no Brasil, analisando seus possíveis efeitos sobre a equidade racial e de gênero
+          </h1>
+
+          <p class="text-left text-gray-400 text-xs sm:text-sm lg:text-base mt-4 animate-fade-in-up" style="animation-delay: .1s">
+            Um estudo dedicado a compreender o papel da inteligência artificial nos processos seletivos de alta liderança e seus impactos sobre a diversidade nas organizações brasileiras.
+          </p>
+        </div>
+
+        <!-- COLUNA DIREITA: Card do pesquisador + CTA -->
+        <div class="flex flex-col items-center lg:items-end">
+
+          <!-- Card do Pesquisador -->
+          <div class="glass-card rounded-2xl p-6 sm:p-9 w-full max-w-lg shadow-2xl shadow-black/40 animate-fade-in-up" style="animation-delay: .2s">
+            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-7">
+
+              <img
+                src="assets/img/breno-vieitas.jpg"
+                alt="Foto de Breno Vieitas, diretor da pesquisa"
+                class="researcher-photo w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover object-top ring-2 ring-emerald-500/40 shrink-0"
+              >
+
+              <div class="text-center sm:text-left">
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-white">Breno Vieitas</h2>
+                <p class="text-emerald-400 text-sm font-medium mt-1 tracking-wide">Diretor da Pesquisa</p>
+
+                <p class="text-gray-300 text-sm leading-relaxed mt-3">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+                  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div class="w-full max-w-lg mt-6 animate-fade-in-up" style="animation-delay: .3s">
+            <button
+              id="open-modal-btn"
+              class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base sm:text-lg tracking-wide px-8 sm:px-10 py-3.5 sm:py-4 rounded-md transition duration-300 shadow-lg shadow-emerald-900/30 hover:shadow-emerald-800/40 hover:-translate-y-0.5"
+            >
+              Participar da Pesquisa
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL INSTITUCIONAL -->
+  <div
+    id="research-modal"
+    data-state="closed"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+  >
+    <!-- Backdrop -->
+    <div id="modal-backdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+
+    <!-- Painel -->
+    <div class="modal-panel relative w-full max-w-lg bg-white rounded-xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+
+      <!-- Header -->
+      <div class="flex items-center justify-between px-6 sm:px-8 py-5 border-b border-gray-200">
+        <h3 id="modal-title" class="font-display text-lg sm:text-xl font-bold text-gray-900">
+          Participar da Pesquisa
+        </h3>
+        <button
+          id="close-modal-btn"
+          aria-label="Fechar"
+          class="text-gray-400 hover:text-gray-700 transition-colors rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-100"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Corpo -->
+      <div class="px-6 sm:px-8 py-6 overflow-y-auto">
+        <!-- PLACEHOLDER: o formulário (perguntas da pesquisa) será inserido aqui -->
+        <div id="modal-form-placeholder" class="text-sm text-gray-500 text-center py-10 border border-dashed border-gray-300 rounded-md">
+          Formulário em breve.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('research-modal');
+    const openBtn = document.getElementById('open-modal-btn');
+    const closeBtn = document.getElementById('close-modal-btn');
+    const backdrop = document.getElementById('modal-backdrop');
+
+    function openModal() {
+      modal.dataset.state = 'open';
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.dataset.state = 'closed';
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.dataset.state === 'open') closeModal();
+    });
+  </script>
+
+</body>
+</html>
