@@ -18,10 +18,16 @@ function flatten(value, prefix, out) {
   return out;
 }
 
+// ";" em vez de "," — o Excel em locale pt-BR (e a maioria dos locales
+// europeus) usa "," como separador decimal, então trata "," como separador
+// de coluna só quando o CSV vem em locale en-US; com "," ele empilha tudo
+// numa célula só. ";" é o separador de lista padrão do Excel em pt-BR.
+const DELIMITER = ';';
+
 function csvEscape(value) {
   const resolved = value instanceof Date ? value.toISOString() : value;
   const str = resolved === undefined || resolved === null ? '' : String(resolved);
-  if (/[",\n\r]/.test(str)) {
+  if (new RegExp(`["${DELIMITER}\\n\\r]`).test(str)) {
     return '"' + str.replace(/"/g, '""') + '"';
   }
   return str;
@@ -59,11 +65,12 @@ module.exports = async function handler(req, res) {
     }
     const columns = baseColumns.concat([...dynamicColumns].sort());
 
-    const lines = [columns.map(csvEscape).join(',')];
+    const lines = [columns.map(csvEscape).join(DELIMITER)];
     for (const row of flatRows) {
-      lines.push(columns.map((col) => csvEscape(row[col])).join(','));
+      lines.push(columns.map((col) => csvEscape(row[col])).join(DELIMITER));
     }
-    // BOM: garante acentuação correta ao abrir no Excel.
+    // BOM (﻿): sem isso o Excel abre o arquivo assumindo Windows-1252 e
+    // quebra os acentos, mesmo o conteúdo sendo UTF-8 válido.
     const csv = '﻿' + lines.join('\r\n');
 
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');

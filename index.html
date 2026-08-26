@@ -232,6 +232,14 @@
 
 <body class="bg-[#04100c] text-gray-100 antialiased">
 
+  <!-- Acesso ADM: badge discreto fixo no canto, link pro login do painel.
+       z-40 (abaixo do modal, que é z-50) pra não flutuar por cima dele quando aberto. -->
+  <a
+    href="/admin.html"
+    class="fixed z-40 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold tracking-wide rounded-full px-3 py-1.5 shadow-lg transition-colors"
+    style="top: 20px; left: 20px;"
+  >ADM</a>
+
   <!-- HERO / SEÇÃO ÚNICA -->
   <section class="bg-hero min-h-screen lg:h-screen w-full flex items-center overflow-y-auto lg:overflow-hidden">
     <div class="max-w-[97vw] mx-auto px-4 sm:px-8 lg:px-10 py-6 w-full">
