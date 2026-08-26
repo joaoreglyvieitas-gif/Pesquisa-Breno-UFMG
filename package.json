@@ -1,0 +1,12 @@
+{
+  "name": "pesquisa-breno-ufmg",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "db:setup": "node scripts/setup-db.js"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.2"
+  }
+}

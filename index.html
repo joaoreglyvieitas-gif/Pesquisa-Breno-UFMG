@@ -53,6 +53,10 @@
   html { scroll-behavior: smooth; }
   body { font-family: 'Inter', sans-serif; }
 
+  /* MOBILE: trava o eixo X pra tela nunca "balançar" pros lados
+     (safety net contra qualquer elemento que acabe passando da largura da viewport). */
+  html, body { max-width: 100%; overflow-x: hidden; }
+
   .bg-hero {
     background-image:
       linear-gradient(180deg, rgba(4, 8, 8, 0.90) 0%, rgba(4, 10, 9, 0.82) 45%, rgba(3, 7, 6, 0.96) 100%),
@@ -131,14 +135,98 @@
   body.modal-open { overflow: hidden; }
   body.modal-open .bg-hero { overflow: hidden !important; }
 
-  /* Modal transitions */
-  #research-modal { transition: opacity 0.25s ease; }
+  /* Modal show/hide — SEM transition CSS de propósito (bug crítico mobile).
+     Causa raiz: o cdn.tailwindcss.com (Play CDN, não é pra produção — ele
+     já avisa isso no console) reinjeta seu <style> toda vez que uma classe
+     ou atributo muda no DOM. Nosso próprio JS de abrir modal muda
+     data-state/aria-hidden/classList no mesmo instante, o que dispara essa
+     reinjeção bem no meio da transição de opacidade — e no motor WebKit
+     (Safari/iPhone) isso cancela a transição a meio caminho e ela trava
+     com opacity ~0 pra sempre: o modal fica 100% invisível, mas o scroll
+     de fundo já foi travado (body.modal-open), dando a sensação de página
+     inteira quebrada/em branco. Reproduzido e confirmado com Playwright+WebKit
+     (não aparece no Chromium, por isso não pegava nos testes anteriores).
+     Fix cirúrgico: tirar a dependência de transition CSS pra essa troca de
+     estado — sem transição, não tem "meio do caminho" pra travar; a regra
+     do atributo aplica o valor final na hora, imune à reinjeção do Tailwind. */
   #research-modal[data-state="closed"] { opacity: 0; pointer-events: none; }
   #research-modal[data-state="open"] { opacity: 1; pointer-events: auto; }
 
-  #research-modal .modal-panel { transition: transform 0.3s ease, opacity 0.3s ease; }
-  #research-modal[data-state="closed"] .modal-panel { transform: translateY(16px) scale(0.98); opacity: 0; }
-  #research-modal[data-state="open"] .modal-panel { transform: translateY(0) scale(1); opacity: 1; }
+  #research-modal[data-state="closed"] .modal-panel { opacity: 0; }
+  #research-modal[data-state="open"] .modal-panel { opacity: 1; }
+
+  /* Tamanho do painel do modal e do corpo rolável, movidos de style inline pra classe
+     pra podermos sobrescrever no media query mobile abaixo (inline style não é
+     sobrescrevível por @media sem !important). Valores == os já testados no desktop.
+     Seletores prefixados com #research-modal (especificidade 1,1,0) de propósito:
+     o CSS injetado pelo Tailwind (CDN) entra DEPOIS do nosso <style> no cascade,
+     então uma classe "pura" (.modal-panel, 0,1,0) perde o empate pra `.rounded-xl`/
+     `.py-6` do Tailwind. Prefixar com o ID garante que a nossa regra sempre vence. */
+  #research-modal .modal-panel {
+    width: 100%;
+    max-width: 800px;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #research-modal .modal-body {
+    flex: 1;
+    overflow-y: scroll;
+    padding-bottom: 120px;
+    min-height: 0; /* truque pro flexbox respeitar a rolagem interna */
+  }
+
+  /* ============================================================
+     MOBILE (< 768px): landing page e modal otimizados pra celular.
+     Usa 767px (não 768px) de propósito: o breakpoint `md:` do Tailwind
+     é min-width:768px, então terminar aqui em 767 evita que as duas
+     regras fiquem ativas ao mesmo tempo exatamente em 768px (o que
+     gerava um conflito visual: painel full-bleed com padding sobrando
+     do overlay). 767/768 é uma divisão limpa, sem sobreposição.
+     ============================================================ */
+  @media (max-width: 767px) {
+    /* Modal vira "quase uma página nova": ocupa 100% da tela, sem
+       moldura/cantos arredondados. O respiro do overlay (p-4/p-6) já
+       é removido no mobile via classes Tailwind no próprio elemento
+       (ver <div id="research-modal">: sem padding abaixo do breakpoint md). */
+    #research-modal .modal-panel {
+      width: 100vw;
+      max-width: 100vw;
+      height: 100vh;
+      height: 100dvh; /* viewport dinâmico: acompanha a barra do navegador/teclado no celular */
+      max-height: 100vh;
+      max-height: 100dvh;
+      border-radius: 0;
+    }
+
+    /* Padding-bottom extra generoso: garante que o teclado do celular,
+       ao abrir pra preencher um campo, não esconda as últimas perguntas. */
+    #research-modal .modal-body { padding-bottom: 160px; }
+  }
+
+  /* ============================================================
+     TOUCH (<= 768px, inclusive): alvos de toque e ajustes que NÃO
+     têm conflito de especificidade com o Tailwind, então usam o
+     breakpoint "cheio" de 768px — cobre também tablets de 768px de
+     largura (ex.: iPad em retrato), que são touch mesmo não sendo
+     "celular estreito" e por isso ficariam de fora do bloco acima.
+     ============================================================ */
+  @media (max-width: 768px) {
+    /* Botão fechar do modal: alvo de toque de 44x44px (era 32x32px). */
+    #close-modal-btn { width: 44px; height: 44px; }
+
+    /* Botão "Participar da Pesquisa" nunca pode passar da largura da tela. */
+    #open-modal-btn { max-width: 100%; }
+
+    /* Bug real encontrado no desk check a 320px: .role-pill usa
+       white-space:nowrap (pra não quebrar visualmente no desktop), mas
+       pills com texto longo ("Mestrando em Inovação Tecnológica UFMG")
+       ficavam mais largas que a tela e tinham o final cortado pelo
+       overflow-x:hidden global. Em telas estreitas, deixa o texto da
+       pill quebrar linha em vez de vazar/cortar. */
+    .role-pill { white-space: normal; max-width: 100%; text-align: center; }
+  }
 </style>
 </head>
 
@@ -147,6 +235,10 @@
   <!-- HERO / SEÇÃO ÚNICA -->
   <section class="bg-hero min-h-screen lg:h-screen w-full flex items-center overflow-y-auto lg:overflow-hidden">
     <div class="max-w-[97vw] mx-auto px-4 sm:px-8 lg:px-10 py-6 w-full">
+      <!-- Mobile (<= 768px, e na real até < 1024px): grid-cols-1 já empilha em coluna
+           única na ordem do próprio DOM — título/texto → CTA (ambos na Coluna 1) →
+           card do pesquisador (Coluna 2) — exatamente a ordem pedida, sem precisar
+           de "order" no CSS. As duas colunas só aparecem lado a lado a partir de lg (1024px). -->
       <div class="grid grid-cols-1 lg:grid-cols-[50%_45%] lg:gap-x-[5%] gap-y-10 items-start">
 
         <!-- COLUNA 1: Texto institucional (50%) -->
@@ -179,20 +271,28 @@
         </div>
 
         <!-- COLUNA 2: Card do pesquisador (45%) -->
-        <div class="glass-card rounded-2xl w-full animate-fade-in-up" style="animation-delay: .15s; padding: 48px;">
+        <!-- Mobile: padding do card reduzido (48px fixo estourava a largura em telas
+             de 320-375px) e escalonado até o valor original em telas maiores. -->
+        <div class="glass-card rounded-2xl w-full animate-fade-in-up p-6 sm:p-8 lg:p-12" style="animation-delay: .15s;">
 
-          <!-- Cabeçalho: nome à esquerda, foto à direita -->
-          <div class="flex justify-between items-start gap-6">
-            <div class="text-left">
-              <h2 class="font-display font-extrabold text-white leading-tight" style="font-size: 2.75rem;">Breno Vieitas</h2>
+          <!-- Cabeçalho: nome + foto.
+               Bug de overflow em mobile: nome (fonte de 44px) e foto fixa de 190px
+               lado a lado não cabiam em telas < 480px, estourando a largura do card
+               horizontalmente. Correção: empilha (nome em cima, foto embaixo) até o
+               breakpoint sm, e a foto ganha tamanho responsivo em vez de fixo. -->
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-6">
+            <div class="text-left min-w-0">
+              <h2
+                class="font-display font-extrabold text-white leading-tight"
+                style="font-size: clamp(1.85rem, 1.3rem + 3.2vw, 2.75rem);"
+              >Breno Vieitas</h2>
               <p class="text-emerald-400 text-base font-medium mt-2 tracking-wide">Diretor da pesquisa</p>
             </div>
 
             <img
               src="assets/img/breno-vieitas.jpg"
               alt="Foto de Breno Vieitas, diretor da pesquisa"
-              class="researcher-photo shrink-0 shadow-xl shadow-black/40"
-              style="width: 190px; height: 190px; object-fit: cover; border-radius: 16px;"
+              class="researcher-photo shrink-0 shadow-xl shadow-black/40 object-cover rounded-2xl w-28 h-28 sm:w-36 sm:h-36 lg:w-[190px] lg:h-[190px]"
             >
           </div>
 
@@ -227,7 +327,8 @@
   <div
     id="research-modal"
     data-state="closed"
-    class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+    class="fixed inset-0 z-50 flex items-center justify-center md:p-6"
+    style="height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center;"
     aria-hidden="true"
     role="dialog"
     aria-modal="true"
@@ -237,7 +338,7 @@
     <div id="modal-backdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
 
     <!-- Painel -->
-    <div class="modal-panel relative w-full max-w-2xl sm:max-w-3xl lg:max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+    <div class="modal-panel relative bg-white rounded-xl shadow-2xl overflow-hidden">
 
       <!-- Header -->
       <div class="flex items-center justify-between px-6 sm:px-8 py-5 border-b border-gray-200">
@@ -256,7 +357,7 @@
       </div>
 
       <!-- Corpo -->
-      <div class="px-6 sm:px-8 py-6 overflow-y-auto flex-1 min-h-0" style="max-height: calc(100vh - 120px);">
+      <div class="modal-body px-6 sm:px-8 py-6">
         <div id="form-root" class="rf-wrap"></div>
       </div>
 

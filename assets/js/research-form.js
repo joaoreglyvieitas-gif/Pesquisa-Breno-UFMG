@@ -600,9 +600,16 @@
   }
 
   function submitPayload(payload) {
-    // TODO: substituir por chamada ao backend/endpoint de armazenamento quando definido.
-    // Ex.: fetch('/api/formulario-a', { method: 'POST', body: JSON.stringify(payload) })
-    console.log('[Formulário A] Payload pronto para envio:', payload);
+    // keepalive: garante que o POST tenta completar mesmo se o usuário fechar
+    // o modal/aba logo em seguida (ex.: ao clicar "Concluir" na tela final).
+    fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      keepalive: true,
+    }).catch(function (err) {
+      console.error('[Formulário A] Falha ao enviar respostas:', err);
+    });
   }
 
   /* ============================================================

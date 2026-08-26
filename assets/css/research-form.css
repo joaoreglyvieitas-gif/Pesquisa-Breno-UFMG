@@ -136,11 +136,13 @@
 }
 
 .rf-checkbox-input {
+  opacity: 0;
   position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
 }
 
 .rf-checkbox-item {
@@ -224,11 +226,13 @@
 .rf-consent-scroll strong { color: #1f2937; }
 
 .rf-consent-input {
+  opacity: 0;
   position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
 }
 
 .rf-consent-card {
@@ -281,8 +285,8 @@
 
 /* ============================================================
    Componente 2: Escala de intensidade em "bolinhas"
-   Tamanho maior nas pontas, menor no centro.
-   Cor: verde (esquerda) → cinza (centro) → roxo (direita).
+   Tamanho crescente da esquerda (menor) para a direita (maior).
+   Cor: roxo (esquerda/menor) → cinza (centro) → verde (direita/maior).
    ============================================================ */
 
 .rf-likert-row {
@@ -350,16 +354,19 @@
 }
 
 .rf-likert-input {
+  opacity: 0;
   position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
 }
 
 .rf-likert-dot {
   --rf-size: 22px;
   --rf-color: #9ca3af;
+  position: relative; /* ancora o ::before de área de toque em mobile, ver media query */
   width: var(--rf-size);
   height: var(--rf-size);
   border-radius: 50%;
@@ -382,15 +389,15 @@
   background: var(--rf-color);
 }
 
-/* pontas maiores, centro menor.
+/* crescimento linear da esquerda (menor) para a direita (maior).
    nth-of-type (não nth-child): cada bolinha é um <label> precedido por um
    <input> irmão, então as posições reais no DOM são 2,4,6,8,10 — nth-of-type
    conta só entre os <label> irmãos e por isso mapeia corretamente para 1..5. */
-.rf-likert-dots .rf-likert-dot:nth-of-type(1) { --rf-size: 32px; --rf-color: #10b981; }
-.rf-likert-dots .rf-likert-dot:nth-of-type(2) { --rf-size: 26px; --rf-color: #6ea98d; }
-.rf-likert-dots .rf-likert-dot:nth-of-type(3) { --rf-size: 19px; --rf-color: #9ca3af; }
-.rf-likert-dots .rf-likert-dot:nth-of-type(4) { --rf-size: 26px; --rf-color: #a08bd6; }
-.rf-likert-dots .rf-likert-dot:nth-of-type(5) { --rf-size: 32px; --rf-color: #8b5cf6; }
+.rf-likert-dots .rf-likert-dot:nth-of-type(1) { --rf-size: 16px; --rf-color: #8b5cf6; }
+.rf-likert-dots .rf-likert-dot:nth-of-type(2) { --rf-size: 22px; --rf-color: #a08bd6; }
+.rf-likert-dots .rf-likert-dot:nth-of-type(3) { --rf-size: 28px; --rf-color: #9ca3af; }
+.rf-likert-dots .rf-likert-dot:nth-of-type(4) { --rf-size: 34px; --rf-color: #6ea98d; }
+.rf-likert-dots .rf-likert-dot:nth-of-type(5) { --rf-size: 40px; --rf-color: #10b981; }
 
 /* ---------- Escala de frequência (Bloco 5) — categórica, não gradiente ---------- */
 .rf-freq-row {
@@ -408,11 +415,13 @@
 }
 
 .rf-freq-input {
+  opacity: 0;
   position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
 }
 
 .rf-freq-option {
@@ -546,4 +555,47 @@
   color: #991b1b;
   font-size: 0.85rem;
   line-height: 1.5;
+}
+
+/* ============================================================
+   TOUCH (<= 768px, inclusive — cobre tablets como iPad em retrato):
+   alvos de toque ampliados para >= 44x44px (diretriz de usabilidade
+   mobile), sem alterar o design visual. Sem conflito de especificidade
+   com o Tailwind aqui (classes .rf-* são só nossas), então não precisa
+   do corte em 767px usado no index.html pro layout do modal.
+   ============================================================ */
+@media (max-width: 768px) {
+  .rf-btn { min-height: 44px; }
+
+  .rf-btn-text {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .rf-checkbox-item,
+  .rf-consent-card {
+    min-height: 44px;
+  }
+
+  .rf-freq-option {
+    min-height: 44px;
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Bolinhas Likert: a escadinha visual (16→40px) fica exatamente como está,
+     mas cada bolinha ganha uma área de toque invisível de 44x44px centralizada
+     por cima, pra evitar que o usuário acerte a opção vizinha sem querer. */
+  .rf-likert-dot::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
 }
