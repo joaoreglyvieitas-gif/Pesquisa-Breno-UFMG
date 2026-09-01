@@ -57,17 +57,10 @@
      (safety net contra qualquer elemento que acabe passando da largura da viewport). */
   html, body { max-width: 100%; overflow-x: hidden; }
 
+  /* Pivot pro Light Mode: container principal (a section do hero) passa de
+     imagem de fundo escura + gradiente pra branco sólido. */
   .bg-hero {
-    background-image:
-      linear-gradient(180deg, rgba(4, 8, 8, 0.90) 0%, rgba(4, 10, 9, 0.82) 45%, rgba(3, 7, 6, 0.96) 100%),
-      url('assets/img/bg-tech.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-  }
-
-  @media (max-width: 1024px) {
-    .bg-hero { background-attachment: scroll; }
+    background-color: #ffffff;
   }
 
   .eyebrow {
@@ -87,20 +80,21 @@
   }
 
   /* Coluna 2 do hero: chancelas institucionais (UFMG + PPGIT).
-     Os PNGs têm fundo transparente de verdade (canal alpha confirmado),
-     então o contêiner fica 100% transparente e as logos aparecem
-     integradas direto no fundo escuro do .bg-hero — sem placa branca. */
+     Contêiner 100% transparente — com o fundo agora branco (Light Mode),
+     a logo da UFMG (texto preto sólido) finalmente tem contraste de
+     sobra, sem precisar de nenhuma placa por trás. Gap reduzido e logos
+     um pouco menores pra ficarem agrupadas de forma coesa, não soltas. */
   .institutional-logos-card {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 64px;
+    gap: 40px;
   }
 
   .institutional-logo {
     width: 80%;
-    max-width: 400px;
+    max-width: 300px;
     height: auto;
     object-fit: contain;
   }
@@ -199,7 +193,7 @@
 </style>
 </head>
 
-<body class="bg-[#04100c] text-gray-100 antialiased">
+<body class="bg-white text-[#1A1A1A] antialiased">
 
   <!-- Acesso ADM: badge discreto fixo no canto, link pro login do painel.
        z-40 (abaixo do modal, que é z-50) pra não flutuar por cima dele quando aberto. -->
@@ -216,7 +210,7 @@
            única na ordem do próprio DOM — título/texto → CTA (ambos na Coluna 1) →
            card do pesquisador (Coluna 2) — exatamente a ordem pedida, sem precisar
            de "order" no CSS. As duas colunas só aparecem lado a lado a partir de lg (1024px). -->
-      <div class="grid grid-cols-1 lg:grid-cols-[50%_45%] lg:gap-x-[5%] gap-y-10 items-start">
+      <div class="grid grid-cols-1 lg:grid-cols-[50%_45%] lg:gap-x-[5%] gap-y-10 items-center min-h-screen">
 
         <!-- COLUNA 1: Texto institucional (50%) -->
         <div class="flex flex-col items-start text-left">
@@ -227,14 +221,14 @@
             </span>
           </div>
 
-          <h1 class="font-display text-balance text-left font-bold text-white leading-[1.1] tracking-tight text-3xl sm:text-4xl lg:text-5xl animate-fade-in-up">
+          <h1 class="font-display text-balance text-left font-bold text-[#1A1A1A] leading-[1.1] tracking-tight text-3xl sm:text-4xl lg:text-5xl animate-fade-in-up">
             Pesquisa sobre como empresas de recrutamento executivo, consultorias de
             <span class="text-emerald-400">headhunting</span> e
             <span class="text-emerald-400">HR Techs</span>
             utilizam ferramentas de <span class="text-emerald-400">IA</span> na mediação do acesso a cargos de alta liderança no Brasil, analisando seus possíveis efeitos sobre a equidade racial e de gênero
           </h1>
 
-          <p class="text-left text-gray-400 text-sm sm:text-base mt-5 animate-fade-in-up" style="animation-delay: .1s">
+          <p class="text-left text-[#2D3748] text-sm sm:text-base mt-5 animate-fade-in-up" style="animation-delay: .1s">
             Um estudo dedicado a compreender o papel da inteligência artificial nos processos seletivos de alta liderança e seus impactos sobre a diversidade nas organizações brasileiras.
           </p>
 
@@ -248,11 +242,10 @@
         </div>
 
         <!-- COLUNA 2: Chancelas institucionais (45%) -->
-        <!-- Perfil pessoal removido: foco 100% institucional. Placa branca sólida
-             abriga as duas logos (UFMG em cima, PPGIT embaixo) — necessária porque
-             ambas têm texto/traços escuros que somem sobre o fundo verde-escuro
-             do .bg-hero. w-full mantém a coluna ocupando o mesmo espaço visual
-             (mesma largura de grid) que o card anterior ocupava. -->
+        <!-- Perfil pessoal removido: foco 100% institucional. Light Mode: fundo
+             branco global já dá contraste às duas logos (UFMG e PPGIT), sem
+             precisar de placa/card por trás. w-full mantém a coluna ocupando
+             o mesmo espaço visual (mesma largura de grid) do card anterior. -->
         <div class="institutional-logos-card w-full animate-fade-in-up" style="animation-delay: .15s;">
           <img
             src="assets/img/ufmg-logo-0.png"
