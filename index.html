@@ -87,23 +87,20 @@
   }
 
   /* Coluna 2 do hero: chancelas institucionais (UFMG + PPGIT).
-     Fundo do site é escuro e as duas logos têm traços/texto escuros,
-     então a "placa" branca sólida é o que garante contraste — sem ela
-     as logos ficam ilegíveis sobre o verde escuro do .bg-hero. */
+     Os PNGs têm fundo transparente de verdade (canal alpha confirmado),
+     então o contêiner fica 100% transparente e as logos aparecem
+     integradas direto no fundo escuro do .bg-hero — sem placa branca. */
   .institutional-logos-card {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 48px;
-    background-color: #ffffff;
-    border-radius: 24px;
-    padding: 48px;
+    gap: 64px;
   }
 
   .institutional-logo {
-    width: 100%;
-    max-width: 250px;
+    width: 80%;
+    max-width: 400px;
     height: auto;
     object-fit: contain;
   }
