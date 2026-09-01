@@ -70,35 +70,12 @@
     .bg-hero { background-attachment: scroll; }
   }
 
-  .researcher-photo {
-    filter: brightness(1.05) contrast(1.12) saturate(1.05);
-  }
-
   .eyebrow {
     font-size: 0.68rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #34d399;
     font-weight: 600;
-  }
-
-  .role-pill {
-    display: inline-flex;
-    align-items: center;
-    border: 1px solid rgba(16, 185, 129, 0.25);
-    background: rgba(16, 185, 129, 0.06);
-    color: #a7f3d0;
-    font-size: 0.68rem;
-    letter-spacing: 0.02em;
-    padding: 0.3rem 0.7rem;
-    border-radius: 9999px;
-    white-space: nowrap;
-    line-height: 1.2;
-  }
-
-  .role-pill-lg {
-    font-size: 0.8rem;
-    padding: 0.45rem 0.9rem;
   }
 
   .text-balance { text-wrap: balance; }
@@ -109,23 +86,26 @@
     letter-spacing: -0.01em;
   }
 
-  .photo-frame::before {
-    content: '';
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 100%;
-    height: 100%;
-    border: 1px solid rgba(16, 185, 129, 0.35);
-    border-radius: 1rem;
-    z-index: -1;
+  /* Coluna 2 do hero: chancelas institucionais (UFMG + PPGIT).
+     Fundo do site é escuro e as duas logos têm traços/texto escuros,
+     então a "placa" branca sólida é o que garante contraste — sem ela
+     as logos ficam ilegíveis sobre o verde escuro do .bg-hero. */
+  .institutional-logos-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    background-color: #ffffff;
+    border-radius: 24px;
+    padding: 48px;
   }
 
-  .glass-card {
-    background: rgba(15, 23, 22, 0.55);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(16, 185, 129, 0.18);
+  .institutional-logo {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    object-fit: contain;
   }
 
   /* Trava a rolagem de fundo com o modal aberto.
@@ -218,14 +198,6 @@
 
     /* Botão "Participar da Pesquisa" nunca pode passar da largura da tela. */
     #open-modal-btn { max-width: 100%; }
-
-    /* Bug real encontrado no desk check a 320px: .role-pill usa
-       white-space:nowrap (pra não quebrar visualmente no desktop), mas
-       pills com texto longo ("Mestrando em Inovação Tecnológica UFMG")
-       ficavam mais largas que a tela e tinham o final cortado pelo
-       overflow-x:hidden global. Em telas estreitas, deixa o texto da
-       pill quebrar linha em vez de vazar/cortar. */
-    .role-pill { white-space: normal; max-width: 100%; text-align: center; }
   }
 </style>
 </head>
@@ -278,53 +250,23 @@
           </button>
         </div>
 
-        <!-- COLUNA 2: Card do pesquisador (45%) -->
-        <!-- Mobile: padding do card reduzido (48px fixo estourava a largura em telas
-             de 320-375px) e escalonado até o valor original em telas maiores. -->
-        <div class="glass-card rounded-2xl w-full animate-fade-in-up p-6 sm:p-8 lg:p-12" style="animation-delay: .15s;">
-
-          <!-- Cabeçalho: nome + foto.
-               Bug de overflow em mobile: nome (fonte de 44px) e foto fixa de 190px
-               lado a lado não cabiam em telas < 480px, estourando a largura do card
-               horizontalmente. Correção: empilha (nome em cima, foto embaixo) até o
-               breakpoint sm, e a foto ganha tamanho responsivo em vez de fixo. -->
-          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-6">
-            <div class="text-left min-w-0">
-              <h2
-                class="font-display font-extrabold text-white leading-tight"
-                style="font-size: clamp(1.85rem, 1.3rem + 3.2vw, 2.75rem);"
-              >Breno Vieitas</h2>
-              <p class="text-emerald-400 text-base font-medium mt-2 tracking-wide">Diretor da pesquisa</p>
-            </div>
-
-            <img
-              src="assets/img/breno-vieitas.jpg"
-              alt="Foto de Breno Vieitas, diretor da pesquisa"
-              class="researcher-photo shrink-0 shadow-xl shadow-black/40 object-cover rounded-2xl w-28 h-28 sm:w-36 sm:h-36 lg:w-[190px] lg:h-[190px]"
-            >
-          </div>
-
-          <!-- Corpo: cargos + biografia -->
-          <div class="mt-8 w-full">
-            <div class="flex flex-wrap justify-start gap-2.5">
-              <span class="role-pill role-pill-lg">Head de Estratégias de Impacto</span>
-              <span class="role-pill role-pill-lg">Sócio da Soluzione Consultoria</span>
-              <span class="role-pill role-pill-lg">ESG</span>
-              <span class="role-pill role-pill-lg">Mestrando em Inovação Tecnológica UFMG</span>
-              <span class="role-pill role-pill-lg">B4T</span>
-              <span class="role-pill role-pill-lg">Educação tecnológica Be Byte</span>
-              <span class="role-pill role-pill-lg">Inovação social Construtora Terraço</span>
-            </div>
-
-            <div class="mt-5 space-y-4">
-              <p class="text-gray-300 text-left" style="font-size: 18px; line-height: 1.6;">
-                Com mais de 10 anos de experiência em consultoria estratégica, atuo como consultor sênior na Soluzione Consultoria, liderando projetos de Implementação de Soluções As a Service. Minha atuação envolve a colaboração com equipes multidisciplinares para desenvolver estratégias empresariais de impacto, integrando inovação tecnológica às demandas corporativas e ao terceiro setor.
-              </p>
-              <p class="text-gray-300 text-left" style="font-size: 18px; line-height: 1.6;">
-                Paralelamente, dedico-me à criação e condução de programas de educação em inovação social tecnológica, ampliando o alcance e a aplicabilidade de soluções transformadoras.
-              </p>
-            </div>
-          </div>
+        <!-- COLUNA 2: Chancelas institucionais (45%) -->
+        <!-- Perfil pessoal removido: foco 100% institucional. Placa branca sólida
+             abriga as duas logos (UFMG em cima, PPGIT embaixo) — necessária porque
+             ambas têm texto/traços escuros que somem sobre o fundo verde-escuro
+             do .bg-hero. w-full mantém a coluna ocupando o mesmo espaço visual
+             (mesma largura de grid) que o card anterior ocupava. -->
+        <div class="institutional-logos-card w-full animate-fade-in-up" style="animation-delay: .15s;">
+          <img
+            src="assets/img/ufmg-logo-0.png"
+            alt="Logotipo da UFMG — Universidade Federal de Minas Gerais"
+            class="institutional-logo"
+          >
+          <img
+            src="assets/img/Logo.png"
+            alt="Logotipo do PPGIT — Pós-Graduação em Inovação Tecnológica"
+            class="institutional-logo"
+          >
         </div>
 
       </div>
