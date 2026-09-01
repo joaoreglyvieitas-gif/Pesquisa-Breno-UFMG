@@ -79,12 +79,10 @@
     letter-spacing: -0.01em;
   }
 
-  /* Coluna 2 do hero: chancelas institucionais (UFMG + PPGIT).
-     Contêiner 100% transparente — com o fundo agora branco (Light Mode),
-     a logo da UFMG (texto preto sólido) finalmente tem contraste de
-     sobra, sem precisar de nenhuma placa por trás. Gap reduzido e logos
-     um pouco menores pra ficarem agrupadas de forma coesa, não soltas. */
-  .institutional-logos-card {
+  /* Coluna 2 do hero: foto do pesquisador em cima, logos institucionais
+     (UFMG + PPGIT) lado a lado embaixo. Contêiner "pai" centraliza os
+     dois blocos verticalmente pra alinhar com o texto da coluna 1. */
+  .right-column {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -92,9 +90,27 @@
     gap: 40px;
   }
 
-  .institutional-logo {
-    width: 80%;
+  .researcher-photo {
     max-width: 300px;
+    width: 100%;
+    border-radius: 24px;
+    object-fit: cover;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Fundo branco global (Light Mode) já dá contraste à logo da UFMG
+     (texto preto sólido), sem precisar de nenhuma placa por trás. */
+  .institutional-logos-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .institutional-logo {
+    width: 100%;
+    max-width: 150px;
     height: auto;
     object-fit: contain;
   }
@@ -241,22 +257,29 @@
           </button>
         </div>
 
-        <!-- COLUNA 2: Chancelas institucionais (45%) -->
-        <!-- Perfil pessoal removido: foco 100% institucional. Light Mode: fundo
-             branco global já dá contraste às duas logos (UFMG e PPGIT), sem
-             precisar de placa/card por trás. w-full mantém a coluna ocupando
-             o mesmo espaço visual (mesma largura de grid) do card anterior. -->
-        <div class="institutional-logos-card w-full animate-fade-in-up" style="animation-delay: .15s;">
+        <!-- COLUNA 2: Foto do pesquisador + chancelas institucionais (45%) -->
+        <!-- Sem nome/bio/tags: só a foto em cima e as logos (UFMG + PPGIT)
+             lado a lado embaixo. w-full mantém a coluna ocupando o mesmo
+             espaço visual (mesma largura de grid) das versões anteriores. -->
+        <div class="right-column w-full animate-fade-in-up" style="animation-delay: .15s;">
           <img
-            src="assets/img/ufmg-logo-0.png"
-            alt="Logotipo da UFMG — Universidade Federal de Minas Gerais"
-            class="institutional-logo"
+            src="assets/img/breno-vieitas.jpg"
+            alt="Foto de Breno Vieitas, diretor da pesquisa"
+            class="researcher-photo"
           >
-          <img
-            src="assets/img/Logo.png"
-            alt="Logotipo do PPGIT — Pós-Graduação em Inovação Tecnológica"
-            class="institutional-logo"
-          >
+
+          <div class="institutional-logos-row">
+            <img
+              src="assets/img/ufmg-logo-0.png"
+              alt="Logotipo da UFMG — Universidade Federal de Minas Gerais"
+              class="institutional-logo"
+            >
+            <img
+              src="assets/img/Logo.png"
+              alt="Logotipo do PPGIT — Pós-Graduação em Inovação Tecnológica"
+              class="institutional-logo"
+            >
+          </div>
         </div>
 
       </div>
