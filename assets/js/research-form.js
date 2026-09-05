@@ -65,8 +65,6 @@
 
   var FORM = {
     consent: {
-      // [Nome do(a) Orientador(a)], e-mails e CAAE são dados institucionais
-      // que precisam ser preenchidos pela equipe do CEP/UFMG antes da coleta real.
       options: [
         { value: 'agree', label: 'Sim, li o termo, concordo em participar e autorizo o uso dos dados de forma agregada para fins acadêmicos.' },
         { value: 'disagree', label: 'Não concordo em participar.' },
@@ -439,11 +437,11 @@
       '<div class="rf-progress-label">Termo de Consentimento</div>' +
       '<h4 class="rf-block-title">Termo de Consentimento Livre e Esclarecido</h4>' +
       '<div class="rf-consent-scroll">' +
-      '<p>Você está sendo convidado(a) a participar de pesquisa de mestrado do PPGIT/UFMG, desenvolvida por Breno Vieitas sob orientação de [Nome do(a) Orientador(a)]. O estudo investiga como ferramentas de inteligência artificial e práticas de recrutamento executivo se relacionam ao acesso de profissionais negros, brancos, homens e mulheres a cargos de alta liderança no Brasil (diretoria, C-level, presidência e conselhos).</p>' +
+      '<p>Você está sendo convidado(a) a participar de pesquisa de mestrado do PPGIT/UFMG, desenvolvida por Breno Vieitas sob orientação de Eduardo de Campos Valadares. O estudo investiga como ferramentas de inteligência artificial e práticas de recrutamento executivo se relacionam ao acesso de profissionais negros, brancos, homens e mulheres a cargos de alta liderança no Brasil (diretoria, C-level, presidência e conselhos).</p>' +
       '<p>A participação é voluntária. É possível interromper o preenchimento a qualquer momento, sem prejuízo. Não serão pedidos nome, empresa, CPF ou outros identificadores. As respostas serão analisadas apenas de forma agregada.</p>' +
       '<p>Perguntas sobre raça/cor e gênero são dados sensíveis, nos termos do Art. 5º, II, da LGPD, e servem somente às comparações estatísticas do estudo. Todas têm a opção "Prefiro não responder".</p>' +
       '<p>Se quiser receber os resultados ou participar da etapa de entrevistas, use o link independente ao final. Esse contato fica em banco separado, sem vínculo com as respostas deste formulário.</p>' +
-      '<p>Dúvidas: pesquisador ([e-mail]) | orientação ([e-mail]) | CEP/UFMG ([e-mail do CEP]) | CAAE: [número].</p>' +
+      '<p>Dúvidas: pesquisador (Brenovieitas@ufmg.br) | orientação (ecamposv@fisica.ufmg.br) | Registro: 2025696536.</p>' +
       '<p>A pesquisa observa a Resolução CNS nº 510/2016 e a LGPD. <strong>Tempo estimado: 6 a 8 minutos.</strong></p>' +
       '</div>' +
       '<div class="rf-field">' +
